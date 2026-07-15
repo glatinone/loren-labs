@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>Loren Labs - Cybersecurity Booth Arena</title>
+  <title>Loren Labs - Cybersecurity Training Portal</title>
   <link rel="stylesheet" href="style.css">
   <meta name="theme-color" content="#0f172a">
 </head>
 <body>
   <div id="app" class="app">
     <header class="header">
-      <h1 class="title">Loren Labs: Cybersecurity Booth Arena</h1>
+      <h1 class="title">Loren Labs: Ultra-Premium Cyber Range</h1>
       <nav class="tabs" role="tablist" aria-label="Challenge Tabs">
         <button class="tab active" data-tab="l1" role="tab" aria-selected="true">Level 1</button>
         <button class="tab" data-tab="l2" role="tab" aria-selected="false">Level 2</button>
@@ -22,18 +22,48 @@
     <main class="main">
       <!-- Level 1: Directory Traversal -->
       <section id="l1" class="panel active" role="tabpanel" aria-labelledby="Level 1">
-        <div class="story-card">
-          <h2 class="story-title">Skenario: Pintu Belakang Gudang Digital (Directory Traversal)</h2>
-          <p class="story-text">Banyak sistem di dunia nyata mengalami kebocoran data karena admin lupa mengunci folder internal. Di sini Anda bertindak sebagai detektif yang memeriksa berkas cadangan rahasia yang tertinggal di area publik.</p>
+        <div class="mission-card">
+          <h2 class="mission-title">🚨 INTEL REPORT: DIRECTORY EXPOSURE</h2>
+          <p class="mission-text">Satelit pemantau kami mendeteksi bahwa administrator server lupa menonaktifkan fitur visualisasi indeks publik. Gunakan terminal taktis di bawah untuk menginspeksi berkas cadangan konfigurasi (.conf) sensitif yang terekspos sebelum pihak ketiga mengeksploitasinya.</p>
         </div>
         <h3 class="panel-title">Level 1: Directory Traversal</h3>
-        <p class="hint">Simulasi direktori sistem. Ketuk file untuk membuka.</p>
-        <div class="dir-grid" id="dirGrid">
-          <div class="file" data-name="readme.txt" tabindex="0" role="button"><span class="icon">📄</span><span>readme.txt</span></div>
-          <div class="file" data-name="system.log" tabindex="0" role="button"><span class="icon">📜</span><span>system.log</span></div>
-          <div class="file" data-name="database_backup_2026.conf" tabindex="0" role="button"><span class="icon">🗄️</span><span>database_backup_2026.conf</span></div>
-          <div class="file" data-name="notes.old" tabindex="0" role="button"><span class="icon">🗒️</span><span>notes.old</span></div>
-          <div class="file" data-name=".shadow" tabindex="0" role="button"><span class="icon">🕶️</span><span>.shadow</span></div>
+        <p class="hint">Sentuh node server untuk memindai artefak.</p>
+        <div class="server-grid" id="dirGrid">
+          <div class="node" data-name="readme.txt" tabindex="0" role="button">
+            <div class="node-face">
+              <span class="icon">📄</span>
+              <span class="node-name">readme.txt</span>
+            </div>
+            <div class="node-scan"><span>SCANNING SYSTEM...</span></div>
+          </div>
+          <div class="node" data-name="system.log" tabindex="0" role="button">
+            <div class="node-face">
+              <span class="icon">📜</span>
+              <span class="node-name">system.log</span>
+            </div>
+            <div class="node-scan"><span>SCANNING SYSTEM...</span></div>
+          </div>
+          <div class="node" data-name="database_backup_2026.conf" tabindex="0" role="button">
+            <div class="node-face">
+              <span class="icon">🗄️</span>
+              <span class="node-name">database_backup_2026.conf</span>
+            </div>
+            <div class="node-scan"><span>SCANNING SYSTEM...</span></div>
+          </div>
+          <div class="node" data-name="notes.old" tabindex="0" role="button">
+            <div class="node-face">
+              <span class="icon">🗒️</span>
+              <span class="node-name">notes.old</span>
+            </div>
+            <div class="node-scan"><span>SCANNING SYSTEM...</span></div>
+          </div>
+          <div class="node" data-name=".shadow" tabindex="0" role="button">
+            <div class="node-face">
+              <span class="icon">🕶️</span>
+              <span class="node-name">.shadow</span>
+            </div>
+            <div class="node-scan"><span>SCANNING SYSTEM...</span></div>
+          </div>
         </div>
 
         <details class="accordion">
@@ -41,18 +71,15 @@
           <div class="acc-body">
             <div class="tier">
               <h3>Tier 1: Analogi</h3>
-              <p>Bayangkan file manager yang tidak sengaja meninggalkan cadangan sensitif. Cari nama yang tampak bernilai tinggi.</p>
+              <p class="decrypt">Bayangkan gudang yang lupa mengunci pintu sampingnya. Barang bernilai tinggi bisa terlihat dari luar.</p>
             </div>
             <div class="tier">
               <h3>Tier 2: Analisis</h3>
-              <p>File cadangan konfigurasi sering berisi artefak rahasia. Sentuh untuk memicu pratinjau lokal.</p>
+              <p class="decrypt">Folder indeks publik sering memaparkan file konfigurasi dan cadangan. Cari ekstensi atau nama yang menunjukkan nilai.</p>
             </div>
             <div class="tier">
               <h3>Tier 3: Solusi Instan</h3>
-              <div class="copyline">
-                <code>database_backup_2026.conf</code>
-                <button class="copy" data-copy="database_backup_2026.conf">Copy</button>
-              </div>
+              <div class="copyline"><code>database_backup_2026.conf</code> <button class="copy" data-copy="database_backup_2026.conf">Copy</button></div>
             </div>
           </div>
         </details>
@@ -60,16 +87,15 @@
 
       <!-- Level 2: Parameter Tampering -->
       <section id="l2" class="panel" role="tabpanel" aria-labelledby="Level 2">
-        <div class="story-card">
-          <h2 class="story-title">Skenario: Kasir Digital yang Lengah (Parameter Tampering)</h2>
-          <p class="story-text">Bayangkan sebuah toko ritel di mana pembeli bisa menulis sendiri harga barang di label sebelum dibawa ke kasir. Celah ini terjadi jika aplikasi memercayai input harga langsung dari HP pengguna tanpa verifikasi server pusat.</p>
+        <div class="mission-card">
+          <h2 class="mission-title">💳 ALERTA FRAUDE: WEAK SERVER TRUST</h2>
+          <p class="mission-text">Sistem pembayaran tiket JAPXCOM memproses transaksi tanpa memvalidasi keaslian harga di komputer pusat. Bantu kami menguji ketahanan kasir ini dengan memotong jalur harga tiket secara langsung dari sisi pengguna.</p>
         </div>
         <h3 class="panel-title">Level 2: Parameter Tampering</h3>
         <div class="checkout">
-          <label for="priceInput">Harga Tiket</label>
-          <div class="price-row">
-            <span>Rp</span>
-            <input id="priceInput" type="number" min="-999999999" step="1" value="1500000" inputmode="numeric" aria-label="Harga tiket">
+          <div class="field">
+            <input id="priceInput" type="number" min="-999999999" step="1" value="1500000" placeholder=" " inputmode="numeric" aria-label="Harga tiket">
+            <label for="priceInput">Harga Tiket</label>
           </div>
           <button id="checkoutBtn" class="primary">Checkout</button>
           <div id="checkoutResult" class="result" aria-live="polite"></div>
@@ -80,11 +106,11 @@
           <div class="acc-body">
             <div class="tier">
               <h3>Tier 1: Analogi</h3>
-              <p>Seperti kasir yang hanya percaya tampilan angka tanpa validasi belakang layar.</p>
+              <p class="decrypt">Seperti toko yang mempercayai harga dari stiker yang ditempel pembeli sendiri.</p>
             </div>
             <div class="tier">
               <h3>Tier 2: Analisis</h3>
-              <p>Jika harga bernilai 0 atau negatif, perhitungan bisa runtuh sehingga transaksi menjadi gratis.</p>
+              <p class="decrypt">Jika sistem percaya input harga tanpa validasi pusat, angka 0 atau negatif bisa menciptakan transaksi gratis.</p>
             </div>
             <div class="tier">
               <h3>Tier 3: Solusi Instan</h3>
@@ -97,16 +123,20 @@
 
       <!-- Level 3: SQL Injection -->
       <section id="l3" class="panel" role="tabpanel" aria-labelledby="Level 3">
-        <div class="story-card">
-          <h2 class="story-title">Skenario: Menipu Penjaga Gerbang Database (SQL Injection)</h2>
-          <p class="story-text">Sistem database membaca karakter khusus seperti tanda petik untuk menyusun perintah data. Peretas memanfaatkan kelemahan ini dengan menyelipkan karakter penipu untuk melewati validasi kata sandi tanpa tahu password aslinya.</p>
+        <div class="mission-card">
+          <h2 class="mission-title">🔓 GATEWAY BREACH: BYPASS LOGIN</h2>
+          <p class="mission-text">Pintu gerbang administrator ini terhubung ke database SQL yang rapuh terhadap karakter komando. Gunakan trik injeksi logika database untuk menipu sistem agar mengira Anda adalah Admin utama tanpa memasukkan sandi.</p>
         </div>
         <h3 class="panel-title">Level 3: SQL Injection</h3>
         <div class="login">
-          <label for="user">Username</label>
-          <input id="user" type="text" placeholder="username">
-          <label for="pass">Password</label>
-          <input id="pass" type="password" placeholder="password">
+          <div class="field">
+            <input id="user" type="text" placeholder=" ">
+            <label for="user">Username</label>
+          </div>
+          <div class="field">
+            <input id="pass" type="password" placeholder=" ">
+            <label for="pass">Password</label>
+          </div>
           <button id="loginBtn" class="primary">Login</button>
           <div id="loginResult" class="result" aria-live="polite"></div>
         </div>
@@ -116,11 +146,11 @@
           <div class="acc-body">
             <div class="tier">
               <h3>Tier 1: Analogi</h3>
-              <p>Penjaga pintu bisa tertipu ketika kata sandi menyisipkan instruksi untuk mengabaikan pemeriksaan.</p>
+              <p class="decrypt">Seperti membisikkan perintah pada penjaga agar mengabaikan daftar tamu.</p>
             </div>
             <div class="tier">
               <h3>Tier 2: Analisis</h3>
-              <p>Pola klasik mengandung <code>' OR '</code> atau komentar setelah pengguna admin.</p>
+              <p class="decrypt">Pola klasik mengandung <code>' OR '</code> atau komentar setelah pengguna admin untuk memutus logika verifikasi.</p>
             </div>
             <div class="tier">
               <h3>Tier 3: Solusi Instan</h3>
@@ -134,14 +164,16 @@
 
       <!-- Level 4: Cross-Site Scripting -->
       <section id="l4" class="panel" role="tabpanel" aria-labelledby="Level 4">
-        <div class="story-card">
-          <h2 class="story-title">Skenario: Papan Pengumuman Beracun (Cross-Site Scripting / XSS)</h2>
-          <p class="story-text">Celah ini terjadi ketika kotak ulasan umum dapat digunakan untuk menyuntikkan kode program aktif. Ketika orang lain membuka ulasan tersebut, browser mereka dipaksa menjalankan instruksi berbahaya secara otomatis.</p>
+        <div class="mission-card">
+          <h2 class="mission-title">☣️ MALWARE INJECTION: ACTIVE CROSS-SITE SCRIPTING</h2>
+          <p class="mission-text">Papan komentar publik ini rentan menerima suntikan kode dinamis. Bantu kami menguji sistem keamanan browser dengan mengirim ulasan yang berisi skrip perintah aktif, memaksa browser memunculkan peringatan sistem.</p>
         </div>
         <h3 class="panel-title">Level 4: Cross-Site Scripting</h3>
         <div class="guestbook">
-          <label for="review">Tinggalkan ulasan</label>
-          <textarea id="review" rows="4" placeholder="Ketik ulasan..."></textarea>
+          <div class="field">
+            <textarea id="review" rows="4" placeholder=" "></textarea>
+            <label for="review">Tinggalkan ulasan</label>
+          </div>
           <button id="reviewBtn" class="primary">Kirim</button>
           <ul id="reviews" class="reviews" aria-live="polite"></ul>
           <div id="xssResult" class="result" aria-live="polite"></div>
@@ -152,11 +184,11 @@
           <div class="acc-body">
             <div class="tier">
               <h3>Tier 1: Analogi</h3>
-              <p>Seperti papan pengumuman yang menempelkan skrip berbahaya di kertasnya.</p>
+              <p class="decrypt">Seperti papan pengumuman yang menempelkan skrip berbahaya di kertasnya.</p>
             </div>
             <div class="tier">
               <h3>Tier 2: Analisis</h3>
-              <p>Masukan yang berisi tag skrip atau marquee memicu kejadian tak diinginkan.</p>
+              <p class="decrypt">Masukan yang berisi tag skrip atau marquee memicu eksekusi otomatis di browser.</p>
             </div>
             <div class="tier">
               <h3>Tier 3: Solusi Instan</h3>
@@ -184,14 +216,20 @@
   <div id="winOverlay" class="win-overlay" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="win-box">
       <div class="lock-anim" aria-hidden="true">
-        <svg viewBox="0 0 120 120" width="100" height="100">
+        <svg viewBox="0 0 120 120" width="110" height="110">
           <defs>
             <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stop-color="#34d399"/>
               <stop offset="100%" stop-color="#22d3ee"/>
             </linearGradient>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="3" result="b"/>
+              <feMerge>
+                <feMergeNode in="b"/><feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
           </defs>
-          <rect x="28" y="50" width="64" height="56" rx="8" fill="none" stroke="url(#g1)" stroke-width="6"/>
+          <rect x="28" y="50" width="64" height="56" rx="8" fill="none" stroke="url(#g1)" stroke-width="6" filter="url(#glow)"/>
           <path id="shackle" d="M40,50 a20,20 0 1 1 40,0" fill="none" stroke="url(#g1)" stroke-width="6" stroke-linecap="round"/>
           <circle cx="60" cy="78" r="5" fill="#34d399"/>
         </svg>

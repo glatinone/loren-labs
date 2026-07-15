@@ -23,7 +23,7 @@
     return id;
   })();
 
-  // Flags: assembled then Base64-obfuscated at runtime
+  // Flags
   const flagsPlain = {
     L1: ['JAPX','COM','{intip','_file_ra','hasia','_mall}'].join(''),
     L2: ['JAPX','COM','{belanja_','gratis_','hacker_','batam}'].join(''),
@@ -47,7 +47,6 @@
     const payload = Object.assign({ ts: Date.now(), sessionId }, obj);
     arr.push(payload);
     setArr(key, arr);
-    // no public live list in refactor - keep silent in UI
   }
 
   // Micro feedback glows
@@ -68,25 +67,33 @@
     qsa('.panel').forEach(p => p.classList.toggle('active', p.id === id));
   }
 
-  // Level 1
+  // Level 1 - server node scanning
   function setupLevel1() {
     const grid = qs('#dirGrid');
-    grid.addEventListener('click', onFileClick);
-    grid.addEventListener('keydown', (e) => { if (e.key === 'Enter') onFileClick(e); });
-    function onFileClick(e) {
-      const tgt = e.target.closest('.file');
+    grid.addEventListener('click', onNodeClick);
+    grid.addEventListener('keydown', (e) => { if (e.key === 'Enter') onNodeClick(e); });
+
+    function onNodeClick(e) {
+      const tgt = e.target.closest('.node');
       if (!tgt) return;
       const name = tgt.getAttribute('data-name');
       pushEvent(KEYS.CHALLENGE_ATTEMPT, { level: 1, msg: `open ${name}` });
+      tgt.classList.add('scanning');
+      setTimeout(() => tgt.classList.remove('scanning'), 900);
+
       if (name === 'database_backup_2026.conf') {
         const flag = flagsB64.L1;
-        openWinOverlay('Selamat: FLAG 1 Terdapat di Cadangan', `Base64 FLAG 1: <code>${flag}</code>`, flag);
-        pushEvent(KEYS.CHALLENGE_SUCCESS, { level: 1, msg: 'FLAG 1 revealed', flagId: 'L1' });
-        flash('success');
+        setTimeout(() => {
+          openWinOverlay('Selamat: FLAG 1 Terdeteksi', `Base64 FLAG 1: <code>${flag}</code>`, flag);
+          pushEvent(KEYS.CHALLENGE_SUCCESS, { level: 1, msg: 'FLAG 1 revealed', flagId: 'L1' });
+          flash('success');
+        }, 750);
       } else {
-        openModal('Pratinjau', `<em>Tidak ada konten berharga pada ${name}</em>`);
-        pushEvent(KEYS.CHALLENGE_FAILURE, { level: 1, msg: `wrong file ${name}` });
-        flash('failure');
+        setTimeout(() => {
+          openModal('Pratinjau', `<em>Tidak ada konten berharga pada ${name}</em>`);
+          pushEvent(KEYS.CHALLENGE_FAILURE, { level: 1, msg: `wrong file ${name}` });
+          flash('failure');
+        }, 600);
       }
     }
   }
@@ -170,6 +177,28 @@
     });
   }
 
+  // Tactical accordions: decrypt typing effect
+  function setupDecryptAccordions() {
+    qsa('details.accordion').forEach(det => {
+      det.addEventListener('toggle', () => {
+        if (det.open) {
+          qsa('.decrypt', det).forEach(el => typeReveal(el));
+        }
+      });
+    });
+  }
+  function typeReveal(el) {
+    if (el.dataset.done) return;
+    const full = el.textContent;
+    el.textContent = '';
+    el.dataset.done = '1';
+    let i = 0;
+    const iv = setInterval(() => {
+      el.textContent += full.charAt(i++);
+      if (i >= full.length) clearInterval(iv);
+    }, 10 + Math.random()*20);
+  }
+
   // Copy helper
   function copyText(text) {
     if (!text) return;
@@ -179,14 +208,13 @@
     }
   }
 
-  // Accordions copy buttons
   function setupAccCopy() {
     qsa('.copy').forEach(btn => btn.addEventListener('click', () => {
       copyText(btn.getAttribute('data-copy'));
     }));
   }
 
-  // Generic modal helpers for previews
+  // Generic modal helpers
   function openModal(title, html) {
     const modal = qs('#modal');
     qs('#modalTitle').textContent = title;
@@ -219,7 +247,6 @@
     overlay.classList.add('show');
     overlay.setAttribute('aria-hidden', 'false');
 
-    // rebind
     copyBtn.onclick = () => copyText(copyVal || bodyEl.textContent);
     closeBtn.onclick = closeWinOverlay;
   }
@@ -252,13 +279,22 @@
         <div class="stat"><h4>Total Attempts</h4><div id="statAttempts">0</div></div>
       </div>
       <h3 style="margin:10px 0 6px; color:#22d3ee">Live Execution Log</h3>
-      <div id="ticker" class="ticker"></div>
+      <div id="ticker" class="terminal"></div>
       <h3 style="margin:10px 0 6px; color:#22d3ee">Level Progression</h3>
-      <div class="bars">
+      <div class="radials">
         ${[1,2,3,4].map(i => (
-          `<div class="bar">
-            <div class="bar-label"><span>Level ${i}</span><span id="barPct${i}">0%</span></div>
-            <div class="bar-track"><div class="bar-fill" id="barFill${i}"></div></div>
+          `<div class=\"rad\">
+            <svg width=\"120\" height=\"120\" viewBox=\"0 0 120 120\">
+              <circle cx=\"60\" cy=\"60\" r=\"50\" stroke=\"#0b2a4b\" stroke-width=\"10\" fill=\"none\" opacity=\"0.6\"/>
+              <circle id=\"rad${i}\" cx=\"60\" cy=\"60\" r=\"50\" stroke=\"url(#grad${i})\" stroke-width=\"10\" fill=\"none\" stroke-linecap=\"round\" transform=\"rotate(-90 60 60)\"/>
+              <defs>
+                <linearGradient id=\"grad${i}\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\">
+                  <stop offset=\"0%\" stop-color=\"#34d399\"/>
+                  <stop offset=\"100%\" stop-color=\"#22d3ee\"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class=\"rad-label\">Level ${i}</div>
           </div>`
         )).join('')}
       </div>
@@ -285,27 +321,29 @@
     const sfl = qs('#statFail'); if (sfl) sfl.textContent = failRate + '%';
     const sa = qs('#statAttempts'); if (sa) sa.textContent = String(totalAttempts);
 
-    // Ticker
+    // Ticker - retro typing
     const ticker = qs('#ticker');
     if (ticker) {
-      const last = [...attempts, ...successes, ...failures].sort((a,b)=> (b.ts||0) - (a.ts||0)).slice(0, 50);
+      const last = [...attempts, ...successes, ...failures].sort((a,b)=> (b.ts||0) - (a.ts||0)).slice(0, 40);
       ticker.innerHTML = last.map(ev => {
         const t = new Date(ev.ts || Date.now()).toLocaleTimeString();
-        const cls = ev.flagId ? 'tick-good' : (/Failure|No XSS|No bypass|wrong file/.test(ev.msg || '') ? 'tick-bad' : '');
         const lvl = ev.level ? `L${ev.level}` : 'L?';
-        return `<div class="${cls}">[${t}] ${lvl} :: ${ev.msg || ''}</div>`;
+        return `<div class=\"tick\">[${t}] ${lvl} :: ${ev.msg || ''}</div>`;
       }).join('');
+      ticker.scrollTop = ticker.scrollHeight;
     }
 
-    // Bars per level
+    // Radial progress per level using stroke-dashoffset
     for (let i=1;i<=4;i++) {
       const a = attempts.filter(x => x.level === i).length;
       const s = successes.filter(x => x.level === i).length;
-      const pct = a ? Math.round((s / a) * 100) : 0;
-      const fill = qs('#barFill'+i);
-      const lab = qs('#barPct'+i);
-      if (fill) fill.style.width = pct + '%';
-      if (lab) lab.textContent = pct + '%';
+      const pct = a ? (s / a) : 0;
+      const c = qs('#rad'+i);
+      if (c) {
+        const r = 50; const circ = 2 * Math.PI * r;
+        c.setAttribute('stroke-dasharray', String(circ));
+        c.setAttribute('stroke-dashoffset', String(circ * (1 - pct)));
+      }
     }
   }
 
@@ -321,6 +359,7 @@
     setupLevel4();
     setupAccCopy();
     setupModal();
+    setupDecryptAccordions();
   });
 
 })();
