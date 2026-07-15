@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -16,14 +16,17 @@
         <button class="tab" data-tab="l2" role="tab" aria-selected="false">Level 2</button>
         <button class="tab" data-tab="l3" role="tab" aria-selected="false">Level 3</button>
         <button class="tab" data-tab="l4" role="tab" aria-selected="false">Level 4</button>
-        <a class="tab link" id="boothLink" href="#" role="button" aria-label="Open Booth Dashboard">Booth</a>
       </nav>
     </header>
 
     <main class="main">
       <!-- Level 1: Directory Traversal -->
       <section id="l1" class="panel active" role="tabpanel" aria-labelledby="Level 1">
-        <h2 class="panel-title">Level 1: Directory Traversal</h2>
+        <div class="story-card">
+          <h2 class="story-title">Skenario: Pintu Belakang Gudang Digital (Directory Traversal)</h2>
+          <p class="story-text">Banyak sistem di dunia nyata mengalami kebocoran data karena admin lupa mengunci folder internal. Di sini Anda bertindak sebagai detektif yang memeriksa berkas cadangan rahasia yang tertinggal di area publik.</p>
+        </div>
+        <h3 class="panel-title">Level 1: Directory Traversal</h3>
         <p class="hint">Simulasi direktori sistem. Ketuk file untuk membuka.</p>
         <div class="dir-grid" id="dirGrid">
           <div class="file" data-name="readme.txt" tabindex="0" role="button"><span class="icon">📄</span><span>readme.txt</span></div>
@@ -38,7 +41,7 @@
           <div class="acc-body">
             <div class="tier">
               <h3>Tier 1: Analogi</h3>
-              <p>Bayangkan file manager yang tanpa izin menyembunyikan cadangan sensitif. Cari nama yang tampak bernilai tinggi.</p>
+              <p>Bayangkan file manager yang tidak sengaja meninggalkan cadangan sensitif. Cari nama yang tampak bernilai tinggi.</p>
             </div>
             <div class="tier">
               <h3>Tier 2: Analisis</h3>
@@ -57,7 +60,11 @@
 
       <!-- Level 2: Parameter Tampering -->
       <section id="l2" class="panel" role="tabpanel" aria-labelledby="Level 2">
-        <h2 class="panel-title">Level 2: Parameter Tampering</h2>
+        <div class="story-card">
+          <h2 class="story-title">Skenario: Kasir Digital yang Lengah (Parameter Tampering)</h2>
+          <p class="story-text">Bayangkan sebuah toko ritel di mana pembeli bisa menulis sendiri harga barang di label sebelum dibawa ke kasir. Celah ini terjadi jika aplikasi memercayai input harga langsung dari HP pengguna tanpa verifikasi server pusat.</p>
+        </div>
+        <h3 class="panel-title">Level 2: Parameter Tampering</h3>
         <div class="checkout">
           <label for="priceInput">Harga Tiket</label>
           <div class="price-row">
@@ -90,7 +97,11 @@
 
       <!-- Level 3: SQL Injection -->
       <section id="l3" class="panel" role="tabpanel" aria-labelledby="Level 3">
-        <h2 class="panel-title">Level 3: SQL Injection</h2>
+        <div class="story-card">
+          <h2 class="story-title">Skenario: Menipu Penjaga Gerbang Database (SQL Injection)</h2>
+          <p class="story-text">Sistem database membaca karakter khusus seperti tanda petik untuk menyusun perintah data. Peretas memanfaatkan kelemahan ini dengan menyelipkan karakter penipu untuk melewati validasi kata sandi tanpa tahu password aslinya.</p>
+        </div>
+        <h3 class="panel-title">Level 3: SQL Injection</h3>
         <div class="login">
           <label for="user">Username</label>
           <input id="user" type="text" placeholder="username">
@@ -105,7 +116,7 @@
           <div class="acc-body">
             <div class="tier">
               <h3>Tier 1: Analogi</h3>
-              <p>Penjaga pintu yang tertipu ketika kata sandi menyisipkan instruksi untuk mengabaikan pemeriksaan.</p>
+              <p>Penjaga pintu bisa tertipu ketika kata sandi menyisipkan instruksi untuk mengabaikan pemeriksaan.</p>
             </div>
             <div class="tier">
               <h3>Tier 2: Analisis</h3>
@@ -123,7 +134,11 @@
 
       <!-- Level 4: Cross-Site Scripting -->
       <section id="l4" class="panel" role="tabpanel" aria-labelledby="Level 4">
-        <h2 class="panel-title">Level 4: Cross-Site Scripting</h2>
+        <div class="story-card">
+          <h2 class="story-title">Skenario: Papan Pengumuman Beracun (Cross-Site Scripting / XSS)</h2>
+          <p class="story-text">Celah ini terjadi ketika kotak ulasan umum dapat digunakan untuk menyuntikkan kode program aktif. Ketika orang lain membuka ulasan tersebut, browser mereka dipaksa menjalankan instruksi berbahaya secara otomatis.</p>
+        </div>
+        <h3 class="panel-title">Level 4: Cross-Site Scripting</h3>
         <div class="guestbook">
           <label for="review">Tinggalkan ulasan</label>
           <textarea id="review" rows="4" placeholder="Ketik ulasan..."></textarea>
@@ -151,15 +166,10 @@
           </div>
         </details>
       </section>
-
-      <section id="logs" class="logs">
-        <h2 class="panel-title">Live Logs</h2>
-        <ul id="logList" class="log-list"></ul>
-      </section>
     </main>
   </div>
 
-  <!-- Modal -->
+  <!-- Generic Modal for previews -->
   <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="modal-content">
       <div class="modal-header">
@@ -167,6 +177,31 @@
         <button id="modalClose" class="icon-btn" aria-label="Close">✖</button>
       </div>
       <div id="modalBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Success Overlay -->
+  <div id="winOverlay" class="win-overlay" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="win-box">
+      <div class="lock-anim" aria-hidden="true">
+        <svg viewBox="0 0 120 120" width="100" height="100">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#34d399"/>
+              <stop offset="100%" stop-color="#22d3ee"/>
+            </linearGradient>
+          </defs>
+          <rect x="28" y="50" width="64" height="56" rx="8" fill="none" stroke="url(#g1)" stroke-width="6"/>
+          <path id="shackle" d="M40,50 a20,20 0 1 1 40,0" fill="none" stroke="url(#g1)" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="60" cy="78" r="5" fill="#34d399"/>
+        </svg>
+      </div>
+      <h3 id="winTitle" class="win-title">Berhasil</h3>
+      <div id="winBody" class="win-body"></div>
+      <div class="win-actions">
+        <button id="winCopy" class="primary">Salin FLAG</button>
+        <button id="winClose" class="ghost">Tutup</button>
+      </div>
     </div>
   </div>
 

@@ -23,7 +23,7 @@
     return id;
   })();
 
-  // Flags - stored as small obfuscated parts, then joined and base64-encoded at runtime
+  // Flags: assembled then Base64-obfuscated at runtime
   const flagsPlain = {
     L1: ['JAPX','COM','{intip','_file_ra','hasia','_mall}'].join(''),
     L2: ['JAPX','COM','{belanja_','gratis_','hacker_','batam}'].join(''),
@@ -44,36 +44,23 @@
   function setArr(key, arr) { localStorage.setItem(key, JSON.stringify(arr)); }
   function pushEvent(key, obj) {
     const arr = getArr(key);
-    arr.push(Object.assign({ ts: Date.now(), sessionId }, obj));
+    const payload = Object.assign({ ts: Date.now(), sessionId }, obj);
+    arr.push(payload);
     setArr(key, arr);
-    if (key !== KEYS.SESSION_START) appendLiveLog(key, obj);
+    // no public live list in refactor - keep silent in UI
   }
 
-  // Live log UI
-  function appendLiveLog(type, obj) {
-    const ul = qs('#logList');
-    if (!ul) return;
-    const li = document.createElement('li');
-    li.className = 'log-item ' + (/SUCCESS/.test(type) ? 'log-good' : /FAILURE/.test(type) ? 'log-bad' : '');
-    const t = new Date(obj.ts || Date.now()).toLocaleTimeString();
-    li.textContent = `[${t}] ${type} :: L${obj.level || '?'} :: ${obj.msg || ''}`;
-    ul.prepend(li);
-    // cap list
-    while (ul.children.length > 50) ul.removeChild(ul.lastChild);
+  // Micro feedback glows
+  function flash(kind) {
+    const cls = kind === 'success' ? 'flash-success' : 'flash-failure';
+    document.body.classList.add(cls);
+    setTimeout(() => document.body.classList.remove(cls), 800);
   }
 
   // SPA Tabs
   function setupTabs() {
     qsa('.tab').forEach(btn => {
-      if (btn.id === 'boothLink') return;
       btn.addEventListener('click', () => activateTab(btn.dataset.tab));
-    });
-    const boothLink = qs('#boothLink');
-    boothLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      const url = new URL(window.location.href);
-      url.searchParams.set('view', 'booth');
-      window.location.href = url.toString();
     });
   }
   function activateTab(id) {
@@ -93,11 +80,13 @@
       pushEvent(KEYS.CHALLENGE_ATTEMPT, { level: 1, msg: `open ${name}` });
       if (name === 'database_backup_2026.conf') {
         const flag = flagsB64.L1;
-        openModal('Protected Preview', `Base64 FLAG 1:<br><code>${flag}</code>`, { level: 1, flagId: 'L1' });
+        openWinOverlay('Selamat: FLAG 1 Terdapat di Cadangan', `Base64 FLAG 1: <code>${flag}</code>`, flag);
         pushEvent(KEYS.CHALLENGE_SUCCESS, { level: 1, msg: 'FLAG 1 revealed', flagId: 'L1' });
+        flash('success');
       } else {
-        openModal('Preview', `<em>Tidak ada konten berharga pada ${name}</em>`);
+        openModal('Pratinjau', `<em>Tidak ada konten berharga pada ${name}</em>`);
         pushEvent(KEYS.CHALLENGE_FAILURE, { level: 1, msg: `wrong file ${name}` });
+        flash('failure');
       }
     }
   }
@@ -112,13 +101,15 @@
       pushEvent(KEYS.CHALLENGE_ATTEMPT, { level: 2, msg: `checkout Rp${val}` });
       if (val <= 0) {
         const flag = flagsB64.L2;
-        res.innerHTML = `Checkout gratis aktif. Base64 FLAG 2: <code>${flag}</code>`;
+        res.innerHTML = '';
+        openWinOverlay('Checkout Gratis Terdeteksi', `Base64 FLAG 2: <code>${flag}</code>`, flag);
         pushEvent(KEYS.CHALLENGE_SUCCESS, { level: 2, msg: 'Free checkout achieved', flagId: 'L2' });
-        openCopyModal('Checkout Gratis', `Base64 FLAG 2:<br><code>${flag}</code>`, flag);
+        flash('success');
       } else {
-        const total = val; // simplistic subtotal
+        const total = val;
         res.textContent = `Dikenakan biaya: Rp${total.toLocaleString('id-ID')}`;
         pushEvent(KEYS.CHALLENGE_FAILURE, { level: 2, msg: 'No bypass' });
+        flash('failure');
       }
     });
   }
@@ -137,13 +128,15 @@
       const containsOr = /'\s*OR\s*'/i.test(u) || /'\s*OR\s*'/i.test(p);
       const matched = patterns.includes(u) || patterns.includes(p) || containsOr;
       if (matched) {
-        res.innerHTML = `<span class="log-good">Admin panel emulated. Access granted.</span>`;
+        res.innerHTML = '';
         const flag = flagsB64.L3;
-        openCopyModal('Admin Panel', `Base64 FLAG 3:<br><code>${flag}</code>`, flag);
+        openWinOverlay('Admin Panel Tersimulasikan', `Base64 FLAG 3: <code>${flag}</code>`, flag);
         pushEvent(KEYS.CHALLENGE_SUCCESS, { level: 3, msg: 'Admin bypass', flagId: 'L3' });
+        flash('success');
       } else {
-        res.innerHTML = `<span class="log-bad">Kredensial salah. Coba pola injeksi.</span>`;
+        res.innerHTML = `<span style="color:#fb7185">Kredensial salah. Coba pola injeksi.</span>`;
         pushEvent(KEYS.CHALLENGE_FAILURE, { level: 3, msg: 'Bad creds' });
+        flash('failure');
       }
     });
   }
@@ -160,24 +153,26 @@
       const lower = txt.toLowerCase();
       if (lower.includes('<script>') || lower.includes('<marquee>')) {
         alert('XSS payload executed');
-        res.innerHTML = `XSS terdeteksi. <span class="log-good">Payload dieksekusi.</span>`;
+        res.innerHTML = '';
         const flag = flagsB64.L4;
-        openCopyModal('XSS Triggered', `Base64 FLAG 4:<br><code>${flag}</code>`, flag);
+        openWinOverlay('XSS Terdeteksi dan Dieksekusi', `Base64 FLAG 4: <code>${flag}</code>`, flag);
         pushEvent(KEYS.CHALLENGE_SUCCESS, { level: 4, msg: 'XSS alert fired', flagId: 'L4' });
+        flash('success');
       } else {
-        // sanitize basic
         const safe = txt.replace(/[<>]/g, c => ({'<':'&lt;','>':'&gt;'}[c]));
         const li = document.createElement('li');
         li.textContent = safe;
         list.prepend(li);
         res.textContent = 'Tersimpan.';
         pushEvent(KEYS.CHALLENGE_FAILURE, { level: 4, msg: 'No XSS' });
+        flash('failure');
       }
     });
   }
 
   // Copy helper
   function copyText(text) {
+    if (!text) return;
     try { navigator.clipboard.writeText(text); } catch (_) {
       const ta = document.createElement('textarea');
       ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
@@ -191,20 +186,13 @@
     }));
   }
 
-  // Modal helpers
-  function openModal(title, html, meta) {
+  // Generic modal helpers for previews
+  function openModal(title, html) {
     const modal = qs('#modal');
     qs('#modalTitle').textContent = title;
     qs('#modalBody').innerHTML = html;
     modal.classList.add('show');
     modal.setAttribute('aria-hidden', 'false');
-  }
-  function openCopyModal(title, html, copyVal) {
-    openModal(title, `${html}<div><button id="modalCopy" class="primary">Copy</button></div>`);
-    setTimeout(() => {
-      const b = qs('#modalCopy');
-      if (b) b.addEventListener('click', () => copyText(copyVal));
-    }, 0);
   }
   function closeModal() {
     const modal = qs('#modal');
@@ -212,13 +200,36 @@
     modal.setAttribute('aria-hidden', 'true');
     qs('#modalBody').innerHTML = '';
   }
-
   function setupModal() {
     qs('#modalClose').addEventListener('click', closeModal);
     qs('#modal').addEventListener('click', (e) => { if (e.target.id === 'modal') closeModal(); });
   }
 
-  // Booth dashboard
+  // Success overlay
+  function openWinOverlay(title, html, copyVal) {
+    let overlay = qs('#winOverlay');
+    const titleEl = qs('#winTitle', overlay);
+    const bodyEl = qs('#winBody', overlay);
+    const copyBtn = qs('#winCopy', overlay);
+    const closeBtn = qs('#winClose', overlay);
+
+    titleEl.textContent = title;
+    bodyEl.innerHTML = html;
+
+    overlay.classList.add('show');
+    overlay.setAttribute('aria-hidden', 'false');
+
+    // rebind
+    copyBtn.onclick = () => copyText(copyVal || bodyEl.textContent);
+    closeBtn.onclick = closeWinOverlay;
+  }
+  function closeWinOverlay() {
+    const overlay = qs('#winOverlay');
+    overlay.classList.remove('show');
+    overlay.setAttribute('aria-hidden', 'true');
+  }
+
+  // Booth dashboard router enforcement
   function bootBoothIfNeeded() {
     const url = new URL(window.location.href);
     if (url.searchParams.get('view') === 'booth') {
@@ -269,21 +280,22 @@
     const totalAttempts = attempts.length;
     const failRate = totalAttempts ? Math.round((failures.length / totalAttempts) * 100) : 0;
 
-    qs('#statDevices').textContent = String(uniqueSessions);
-    qs('#statFlags').textContent = String(uniqueFlags);
-    qs('#statFail').textContent = failRate + '%';
-    qs('#statAttempts').textContent = String(totalAttempts);
+    const sd = qs('#statDevices'); if (sd) sd.textContent = String(uniqueSessions);
+    const sf = qs('#statFlags'); if (sf) sf.textContent = String(uniqueFlags);
+    const sfl = qs('#statFail'); if (sfl) sfl.textContent = failRate + '%';
+    const sa = qs('#statAttempts'); if (sa) sa.textContent = String(totalAttempts);
 
     // Ticker
     const ticker = qs('#ticker');
-    const last = [...attempts, ...successes, ...failures].sort((a,b)=> (b.ts||0) - (a.ts||0)).slice(0, 50);
-    ticker.innerHTML = last.map(ev => {
-      const t = new Date(ev.ts || Date.now()).toLocaleTimeString();
-      const kind = ev.flagId ? 'SUCCESS' : (/ATTEMPT/.test(ev.msg || '') ? 'ATTEMPT' : (ev.msg || ''));
-      const cls = ev.flagId ? 'tick-good' : (/Failure|No XSS|No bypass|wrong file/.test(ev.msg || '') ? 'tick-bad' : '');
-      const lvl = ev.level ? `L${ev.level}` : 'L?';
-      return `<div class="${cls}">[${t}] ${lvl} :: ${ev.msg || ''}</div>`;
-    }).join('');
+    if (ticker) {
+      const last = [...attempts, ...successes, ...failures].sort((a,b)=> (b.ts||0) - (a.ts||0)).slice(0, 50);
+      ticker.innerHTML = last.map(ev => {
+        const t = new Date(ev.ts || Date.now()).toLocaleTimeString();
+        const cls = ev.flagId ? 'tick-good' : (/Failure|No XSS|No bypass|wrong file/.test(ev.msg || '') ? 'tick-bad' : '');
+        const lvl = ev.level ? `L${ev.level}` : 'L?';
+        return `<div class="${cls}">[${t}] ${lvl} :: ${ev.msg || ''}</div>`;
+      }).join('');
+    }
 
     // Bars per level
     for (let i=1;i<=4;i++) {
