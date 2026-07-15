@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Loren Labs - Cybersecurity Booth Arena</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="theme-color" content="#0f172a">
+</head>
+<body>
+  <div id="app" class="app">
+    <header class="header">
+      <h1 class="title">Loren Labs: Cybersecurity Booth Arena</h1>
+      <nav class="tabs" role="tablist" aria-label="Challenge Tabs">
+        <button class="tab active" data-tab="l1" role="tab" aria-selected="true">Level 1</button>
+        <button class="tab" data-tab="l2" role="tab" aria-selected="false">Level 2</button>
+        <button class="tab" data-tab="l3" role="tab" aria-selected="false">Level 3</button>
+        <button class="tab" data-tab="l4" role="tab" aria-selected="false">Level 4</button>
+        <a class="tab link" id="boothLink" href="#" role="button" aria-label="Open Booth Dashboard">Booth</a>
+      </nav>
+    </header>
+
+    <main class="main">
+      <!-- Level 1: Directory Traversal -->
+      <section id="l1" class="panel active" role="tabpanel" aria-labelledby="Level 1">
+        <h2 class="panel-title">Level 1: Directory Traversal</h2>
+        <p class="hint">Simulasi direktori sistem. Ketuk file untuk membuka.</p>
+        <div class="dir-grid" id="dirGrid">
+          <div class="file" data-name="readme.txt" tabindex="0" role="button"><span class="icon">📄</span><span>readme.txt</span></div>
+          <div class="file" data-name="system.log" tabindex="0" role="button"><span class="icon">📜</span><span>system.log</span></div>
+          <div class="file" data-name="database_backup_2026.conf" tabindex="0" role="button"><span class="icon">🗄️</span><span>database_backup_2026.conf</span></div>
+          <div class="file" data-name="notes.old" tabindex="0" role="button"><span class="icon">🗒️</span><span>notes.old</span></div>
+          <div class="file" data-name=".shadow" tabindex="0" role="button"><span class="icon">🕶️</span><span>.shadow</span></div>
+        </div>
+
+        <details class="accordion">
+          <summary>Butuh Bantuan?</summary>
+          <div class="acc-body">
+            <div class="tier">
+              <h3>Tier 1: Analogi</h3>
+              <p>Bayangkan file manager yang tanpa izin menyembunyikan cadangan sensitif. Cari nama yang tampak bernilai tinggi.</p>
+            </div>
+            <div class="tier">
+              <h3>Tier 2: Analisis</h3>
+              <p>File cadangan konfigurasi sering berisi artefak rahasia. Sentuh untuk memicu pratinjau lokal.</p>
+            </div>
+            <div class="tier">
+              <h3>Tier 3: Solusi Instan</h3>
+              <div class="copyline">
+                <code>database_backup_2026.conf</code>
+                <button class="copy" data-copy="database_backup_2026.conf">Copy</button>
+              </div>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- Level 2: Parameter Tampering -->
+      <section id="l2" class="panel" role="tabpanel" aria-labelledby="Level 2">
+        <h2 class="panel-title">Level 2: Parameter Tampering</h2>
+        <div class="checkout">
+          <label for="priceInput">Harga Tiket</label>
+          <div class="price-row">
+            <span>Rp</span>
+            <input id="priceInput" type="number" min="-999999999" step="1" value="1500000" inputmode="numeric" aria-label="Harga tiket">
+          </div>
+          <button id="checkoutBtn" class="primary">Checkout</button>
+          <div id="checkoutResult" class="result" aria-live="polite"></div>
+        </div>
+
+        <details class="accordion">
+          <summary>Butuh Bantuan?</summary>
+          <div class="acc-body">
+            <div class="tier">
+              <h3>Tier 1: Analogi</h3>
+              <p>Seperti kasir yang hanya percaya tampilan angka tanpa validasi belakang layar.</p>
+            </div>
+            <div class="tier">
+              <h3>Tier 2: Analisis</h3>
+              <p>Jika harga bernilai 0 atau negatif, perhitungan bisa runtuh sehingga transaksi menjadi gratis.</p>
+            </div>
+            <div class="tier">
+              <h3>Tier 3: Solusi Instan</h3>
+              <div class="copyline"><code>0</code> <button class="copy" data-copy="0">Copy</button></div>
+              <div class="copyline"><code>-1</code> <button class="copy" data-copy="-1">Copy</button></div>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- Level 3: SQL Injection -->
+      <section id="l3" class="panel" role="tabpanel" aria-labelledby="Level 3">
+        <h2 class="panel-title">Level 3: SQL Injection</h2>
+        <div class="login">
+          <label for="user">Username</label>
+          <input id="user" type="text" placeholder="username">
+          <label for="pass">Password</label>
+          <input id="pass" type="password" placeholder="password">
+          <button id="loginBtn" class="primary">Login</button>
+          <div id="loginResult" class="result" aria-live="polite"></div>
+        </div>
+
+        <details class="accordion">
+          <summary>Butuh Bantuan?</summary>
+          <div class="acc-body">
+            <div class="tier">
+              <h3>Tier 1: Analogi</h3>
+              <p>Penjaga pintu yang tertipu ketika kata sandi menyisipkan instruksi untuk mengabaikan pemeriksaan.</p>
+            </div>
+            <div class="tier">
+              <h3>Tier 2: Analisis</h3>
+              <p>Pola klasik mengandung <code>' OR '</code> atau komentar setelah pengguna admin.</p>
+            </div>
+            <div class="tier">
+              <h3>Tier 3: Solusi Instan</h3>
+              <div class="copyline"><code>admin' --</code> <button class="copy" data-copy="admin' --">Copy</button></div>
+              <div class="copyline"><code>admin' OR '1'='1</code> <button class="copy" data-copy="admin' OR '1'='1">Copy</button></div>
+              <div class="copyline"><code>x' OR '1'='1</code> <button class="copy" data-copy="x' OR '1'='1">Copy</button></div>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- Level 4: Cross-Site Scripting -->
+      <section id="l4" class="panel" role="tabpanel" aria-labelledby="Level 4">
+        <h2 class="panel-title">Level 4: Cross-Site Scripting</h2>
+        <div class="guestbook">
+          <label for="review">Tinggalkan ulasan</label>
+          <textarea id="review" rows="4" placeholder="Ketik ulasan..."></textarea>
+          <button id="reviewBtn" class="primary">Kirim</button>
+          <ul id="reviews" class="reviews" aria-live="polite"></ul>
+          <div id="xssResult" class="result" aria-live="polite"></div>
+        </div>
+
+        <details class="accordion">
+          <summary>Butuh Bantuan?</summary>
+          <div class="acc-body">
+            <div class="tier">
+              <h3>Tier 1: Analogi</h3>
+              <p>Seperti papan pengumuman yang menempelkan skrip berbahaya di kertasnya.</p>
+            </div>
+            <div class="tier">
+              <h3>Tier 2: Analisis</h3>
+              <p>Masukan yang berisi tag skrip atau marquee memicu kejadian tak diinginkan.</p>
+            </div>
+            <div class="tier">
+              <h3>Tier 3: Solusi Instan</h3>
+              <div class="copyline"><code>&lt;script&gt;alert(1)&lt;/script&gt;</code> <button class="copy" data-copy="<script>alert(1)</script>">Copy</button></div>
+              <div class="copyline"><code>&lt;marquee&gt;hi&lt;/marquee&gt;</code> <button class="copy" data-copy="<marquee>hi</marquee>">Copy</button></div>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <section id="logs" class="logs">
+        <h2 class="panel-title">Live Logs</h2>
+        <ul id="logList" class="log-list"></ul>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">Detail</h3>
+        <button id="modalClose" class="icon-btn" aria-label="Close">✖</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
